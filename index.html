@@ -109,6 +109,56 @@
   @keyframes rise{from{opacity:0;transform:translateY(34px) scale(.94);filter:blur(10px)}to{opacity:var(--o,1);transform:none;filter:blur(0)}}
   @keyframes wdIn{from{opacity:0;transform:translateY(20px) scale(.85);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
   @keyframes wdOut{from{opacity:1;transform:none;filter:blur(0)}to{opacity:0;transform:translateY(-16px) scale(1.1);filter:blur(8px)}}
+
+  /* ===== MÀN KHÓA MỞ ĐẦU + HÀNH TRÌNH XUYÊN KHÔNG GIAN ===== */
+  #gate{position:fixed;inset:0;z-index:20;overflow:hidden;color:#fff;
+      background:radial-gradient(ellipse at 50% 48%,#26103f 0%,#12061f 55%,#07020f 100%);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;
+      transition:opacity 1.2s ease,visibility 1.2s}
+  #gate.done{opacity:0;visibility:hidden;pointer-events:none}
+  #warp{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .g-glow{position:absolute;left:50%;top:50%;width:min(80vmin,560px);height:min(80vmin,560px);margin:calc(min(80vmin,560px)/-2) 0 0 calc(min(80vmin,560px)/-2);
+      border-radius:50%;pointer-events:none;
+      background:radial-gradient(circle,rgba(255,120,190,.35) 0%,rgba(150,80,255,.18) 40%,transparent 70%);
+      animation:gpulse 3.6s ease-in-out infinite}
+  @keyframes gpulse{0%,100%{transform:scale(.9);opacity:.7}50%{transform:scale(1.1);opacity:1}}
+  .g-stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;max-width:560px}
+  .g-kicker{letter-spacing:.38em;text-transform:uppercase;font-size:clamp(10px,1.6vw,13px);color:#ffd9ea;opacity:0;
+      animation:gfade 1.6s .3s both}
+  .g-title{font-family:'Pacifico',cursive;font-weight:400;font-size:clamp(26px,6vw,46px);line-height:1.3;
+      filter:drop-shadow(0 4px 18px rgba(255,90,160,.55));opacity:0;animation:gfade 1.6s .7s both}
+  .g-sub{font-weight:300;font-size:clamp(12px,2vw,15px);color:#f3d3e6;opacity:0;animation:gfade 1.6s 1.1s both}
+  @keyframes gfade{from{opacity:0;transform:translateY(16px);filter:blur(8px)}to{opacity:1;transform:none;filter:blur(0)}}
+  .g-lockwrap{position:relative;width:132px;height:150px;margin:6px 0 4px;opacity:0;animation:gfade 1.6s .1s both}
+  .g-lockwrap svg{width:100%;height:100%;overflow:visible;animation:gfloat 3.2s ease-in-out infinite;
+      filter:drop-shadow(0 0 22px rgba(255,150,210,.7))}
+  @keyframes gfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .g-lockwrap .sh{transform-origin:84px 58px;transition:transform .9s cubic-bezier(.3,1.4,.4,1)}
+  .g-lockwrap.open .sh{transform:translateY(-17px) rotate(-32deg)}
+  .g-lockwrap .kh{transition:fill .5s}
+  .g-lockwrap.open .kh{fill:#fff7cf;filter:drop-shadow(0 0 8px #ffe08a)}
+  .g-lockwrap::before,.g-lockwrap::after{content:'';position:absolute;left:50%;top:55%;width:100%;height:100%;
+      margin:-50% 0 0 -50%;border-radius:50%;border:1px solid rgba(255,190,225,.55);opacity:0;pointer-events:none}
+  .g-lockwrap::before{animation:gring 3.2s 1.4s ease-out infinite}
+  .g-lockwrap::after{animation:gring 3.2s 2.4s ease-out infinite}
+  @keyframes gring{from{transform:scale(.7);opacity:.8}to{transform:scale(3.2);opacity:0}}
+  #unlockBtn{margin-top:10px;padding:13px 34px;font-size:16px;letter-spacing:.04em;border-color:rgba(255,227,160,.8);
+      background:linear-gradient(135deg,rgba(255,110,180,.45),rgba(255,200,120,.35));
+      box-shadow:0 0 28px rgba(255,120,190,.55),inset 0 0 14px rgba(255,255,255,.18);
+      opacity:0;animation:gfade 1.6s 1.5s both,gbtn 2.4s 3.2s ease-in-out infinite}
+  @keyframes gbtn{0%,100%{box-shadow:0 0 22px rgba(255,120,190,.5),inset 0 0 14px rgba(255,255,255,.18)}50%{box-shadow:0 0 46px rgba(255,190,120,.85),inset 0 0 20px rgba(255,255,255,.3)}}
+  #gate.going .g-kicker,#gate.going .g-title,#gate.going .g-sub,#gate.going #unlockBtn{animation:gout .8s ease-in both}
+  @keyframes gout{to{opacity:0;transform:translateY(-14px) scale(.96);filter:blur(10px)}}
+  #gate.warp .g-lockwrap{animation:glockout 1.3s .5s cubic-bezier(.6,0,.9,.4) forwards}
+  @keyframes glockout{to{opacity:0;transform:scale(5);filter:blur(14px)}}
+  .g-msg{position:absolute;left:0;right:0;bottom:12vh;padding:0 24px;text-align:center;font-family:'Pacifico',cursive;
+      font-size:clamp(18px,3.6vw,30px);color:#fff0f7;text-shadow:0 0 18px rgba(255,120,190,.9),0 2px 10px rgba(0,0,0,.5);
+      pointer-events:none;opacity:0;transition:opacity .8s,transform .8s,filter .8s;transform:translateY(14px);filter:blur(8px)}
+  .g-msg.show{opacity:1;transform:none;filter:blur(0)}
+  .g-flash{position:absolute;inset:0;pointer-events:none;opacity:0;
+      background:radial-gradient(circle at 50% 55%,#fff 0%,#ffd3ea 35%,#ff9ccb 70%,#c06ad0 100%)}
+  #gate.flash .g-flash{animation:gflash 1.5s ease-in-out forwards}
+  @keyframes gflash{0%{opacity:0}35%{opacity:1}70%{opacity:1}100%{opacity:0}}
 </style>
 </head>
 <body>
@@ -135,6 +185,7 @@
     <div class="row">
       <button id="heartBtn">💖 Thả tim</button>
       <button id="replayBtn">✨ Xem lại</button>
+      <button id="musicBtn" aria-label="Bật/tắt nhạc">🔊 Nhạc</button>
     </div>
     <p class="hint">Kéo để xoay · Cuộn / chụm tay để phóng to · Chạm để thả tim</p>
   </footer>
@@ -142,6 +193,31 @@
 
 <div class="ring"></div><div class="ring b"></div>
 <div class="curtain"></div>
+
+<div id="gate">
+  <canvas id="warp"></canvas>
+  <div class="g-glow"></div>
+  <div class="g-stage">
+    <p class="g-kicker">Một điều bất ngờ</p>
+    <div class="g-lockwrap" id="lock">
+      <svg viewBox="0 0 120 140" aria-hidden="true">
+        <defs>
+          <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe9a8"/><stop offset=".5" stop-color="#ffb35e"/><stop offset="1" stop-color="#e0568f"/></linearGradient>
+          <linearGradient id="lb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7fb5"/><stop offset="1" stop-color="#b8307a"/></linearGradient>
+        </defs>
+        <path class="sh" d="M36 62 V42 a24 24 0 0 1 48 0 V62" fill="none" stroke="url(#lg)" stroke-width="10" stroke-linecap="round"/>
+        <rect x="22" y="58" width="76" height="62" rx="14" fill="url(#lb)" stroke="url(#lg)" stroke-width="3"/>
+        <circle class="kh" cx="60" cy="86" r="8" fill="#3a0d3e"/>
+        <rect class="kh" x="57" y="90" width="6" height="16" rx="3" fill="#3a0d3e"/>
+      </svg>
+    </div>
+    <h2 class="g-title" id="gTitle">Có món quà dành cho bạn</h2>
+    <p class="g-sub">Chạm vào nút bên dưới để mở khóa nhé</p>
+    <button id="unlockBtn">🔓 Mở khóa</button>
+  </div>
+  <p class="g-msg" id="gMsg"></p>
+  <div class="g-flash"></div>
+</div>
 
 <div id="err"><p>Không tải được đồ họa 3D.<br>Hãy kiểm tra kết nối mạng hoặc bật WebGL trên trình duyệt nhé 🌸</p></div>
 
@@ -801,7 +877,260 @@
     document.dispatchEvent(new Event('replay'));
   }
   document.getElementById('replayBtn').addEventListener('click', play);
-  play();
+  window.__startBouquet = play; // được gọi sau khi mở khóa xong
+})();
+</script>
+<script>
+/* ===== Màn khóa → xuyên chiều không gian → bó hoa ===== */
+(function () {
+  var gate = document.getElementById('gate'), cv = document.getElementById('warp'), ctx = cv.getContext('2d');
+  var lock = document.getElementById('lock'), btn = document.getElementById('unlockBtn'), gMsg = document.getElementById('gMsg');
+  var to = (new URLSearchParams(location.search).get('to') || '').trim().slice(0, 40);
+  if (to) document.getElementById('gTitle').textContent = 'Có món quà dành riêng cho ' + to;
+
+  var W, H, DPR, cx, cy;
+  function size() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.width = Math.round(innerWidth * DPR); H = cv.height = Math.round(innerHeight * DPR);
+    cx = W / 2; cy = H * 0.5;
+  }
+  size(); addEventListener('resize', size);
+
+  var cols = ['255,255,255', '255,170,215', '255,225,150', '190,150,255', '255,120,180'];
+  var N = 420, st = [];
+  function mk(z) {
+    return { x: (Math.random() * 2 - 1), y: (Math.random() * 2 - 1), z: z === undefined ? Math.random() : z,
+             c: cols[Math.floor(Math.random() * cols.length)], s: 0.6 + Math.random() * 1.4 };
+  }
+  for (var i = 0; i < N; i++) st.push(mk());
+
+  var speed = 0.0007, target = 0.0007, rings = [], ringT = 0, hue = 0, heartsOn = false, hearts = [];
+  var running = true, last = performance.now();
+
+  function frame(now) {
+    if (!running) return;
+    var dt = Math.min(0.05, (now - last) / 1000); last = now;
+    speed += (target - speed) * Math.min(1, dt * 2.2);
+    var sc = Math.min(W, H) * 0.9, fast = speed > 0.004;
+
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = 'rgba(8,2,16,' + (fast ? 0.28 : 0.6) + ')';
+    ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineCap = 'round';
+
+    for (var i = 0; i < N; i++) {
+      var p = st[i], pz = p.z;
+      p.z -= speed * (dt * 60) * (0.5 + p.s * 0.5);
+      if (p.z <= 0.01) { st[i] = mk(1); continue; }
+      var x1 = cx + p.x / p.z * sc * 0.5, y1 = cy + p.y / p.z * sc * 0.5;
+      var tz = Math.min(1.2, p.z + speed * (dt * 60) * 7 * (0.5 + p.s * 0.5));
+      var x0 = cx + p.x / tz * sc * 0.5, y0 = cy + p.y / tz * sc * 0.5;
+      var a = Math.min(1, (1 - p.z) * 1.6);
+      ctx.strokeStyle = 'rgba(' + p.c + ',' + a.toFixed(3) + ')';
+      ctx.lineWidth = (0.6 + (1 - p.z) * 2.2 * p.s) * DPR;
+      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+    }
+
+    // các "cổng" ánh sáng bay vụt qua
+    if (fast) {
+      ringT -= dt;
+      if (ringT <= 0) { ringT = 0.38; rings.push({ z: 1, c: cols[1 + (hue++ % 4)] }); }
+    }
+    for (var r = rings.length - 1; r >= 0; r--) {
+      var g = rings[r]; g.z -= dt * (0.28 + speed * 14);
+      if (g.z <= 0.02) { rings.splice(r, 1); continue; }
+      var rad = sc * 0.16 / g.z, al = Math.min(1, (1 - g.z) * 2) * Math.min(1, g.z * 6);
+      ctx.strokeStyle = 'rgba(' + g.c + ',' + (al * 0.8).toFixed(3) + ')';
+      ctx.lineWidth = (1.5 + (1 - g.z) * 5) * DPR;
+      ctx.shadowColor = 'rgba(' + g.c + ',1)'; ctx.shadowBlur = 18 * DPR;
+      ctx.beginPath(); ctx.arc(cx, cy, rad, 0, 6.2832); ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+
+    // trái tim nhỏ trôi vào từ chiều không gian
+    if (heartsOn && Math.random() < 0.18) hearts.push({ x: Math.random() * 2 - 1, y: Math.random() * 2 - 1, z: 1, c: cols[1 + Math.floor(Math.random() * 4)] });
+    ctx.font = Math.round(22 * DPR) + 'px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    for (var h = hearts.length - 1; h >= 0; h--) {
+      var q = hearts[h]; q.z -= dt * 0.35;
+      if (q.z <= 0.05) { hearts.splice(h, 1); continue; }
+      var hx = cx + q.x / q.z * sc * 0.3, hy = cy + q.y / q.z * sc * 0.3, al2 = Math.min(1, (1 - q.z) * 2.5) * Math.min(1, q.z * 5);
+      ctx.fillStyle = 'rgba(' + q.c + ',' + al2.toFixed(3) + ')';
+      ctx.save(); ctx.translate(hx, hy); ctx.scale(1 / q.z * 0.7, 1 / q.z * 0.7); ctx.fillText('♥', 0, 0); ctx.restore();
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  var msgs = [
+    [0.4, 'Đang mở khóa…'],
+    [2.0, 'Xuyên qua chiều không gian…'],
+    [3.9, 'Chiều không gian cuối cùng…'],
+    [5.7, 'Dành riêng cho bạn 💐']
+  ];
+  function say(t) {
+    gMsg.classList.remove('show');
+    setTimeout(function () { gMsg.textContent = t; gMsg.classList.add('show'); }, 450);
+  }
+
+  /* ===== Nhạc nền tự tạo bằng Web Audio (không cần file mp3) ===== */
+  function createMusic() {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    var ac = new AC();
+    var master = ac.createGain(); master.gain.value = 0;
+    var comp = ac.createDynamicsCompressor(); master.connect(comp); comp.connect(ac.destination);
+    var len = Math.floor(ac.sampleRate * 2.8), ir = ac.createBuffer(2, len, ac.sampleRate);
+    for (var c = 0; c < 2; c++) { var d = ir.getChannelData(c); for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.6); }
+    var conv = ac.createConvolver(); conv.buffer = ir;
+    var wet = ac.createGain(); wet.gain.value = 0.4; conv.connect(wet); wet.connect(master);
+    var dry = ac.createGain(); dry.gain.value = 0.8; dry.connect(master);
+    function out(n) { n.connect(dry); n.connect(conv); }
+    function fq(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+    function note(m, t, dur, type, vol, att, lp, det) {
+      var o = ac.createOscillator(); o.type = type; o.frequency.value = fq(m); if (det) o.detune.value = det;
+      var f = ac.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = lp;
+      var g = ac.createGain(); g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(vol, t + att);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(f); f.connect(g); out(g); o.start(t); o.stop(t + dur + 0.05);
+    }
+    function bell(m, t, dur, vol) { note(m, t, dur, 'sine', vol, 0.01, 6000); note(m + 12, t, dur * 0.6, 'sine', vol * 0.25, 0.01, 8000, 4); }
+
+    var bpm = 72, beat = 60 / bpm, bar = beat * 4;
+    var chords = [
+      { b: 48, t: [60, 64, 67] }, { b: 43, t: [59, 62, 67] },
+      { b: 45, t: [60, 64, 69] }, { b: 41, t: [60, 65, 69] }
+    ];
+    var mel = [
+      [[[0,76,1.5],[1.5,74,.5],[2,72,1],[3,67,1]], [[0,71,1.5],[1.5,72,.5],[2,74,2]],
+       [[0,72,1],[1,76,1],[2,79,1.5],[3.5,76,.5]], [[0,77,1.5],[1.5,76,.5],[2,72,2]]],
+      [[[0,79,1],[1,76,1],[2,74,1],[3,76,1]], [[0,74,1.5],[1.5,71,.5],[2,67,2]],
+       [[0,69,1],[1,72,1],[2,76,1.5],[3.5,74,.5]], [[0,72,1.5],[1.5,74,.5],[2,72,1],[3,69,1]]]
+    ];
+    var arp = [0, 1, 2, 1, 2, 1, 2, 1];
+    function schedBar(idx, t) {
+      var ch = chords[idx % 4], phrase = Math.floor(idx / 4) % 2;
+      ch.t.forEach(function (m) { note(m - 12, t, bar + 0.6, 'triangle', 0.035, 0.7, 900); });
+      note(ch.b, t, bar, 'sine', 0.13, 0.04, 400);
+      for (var k = 0; k < 8; k++) note(ch.t[arp[k]] + 12, t + k * beat / 2, 1.0, 'triangle', 0.05, 0.01, 2600);
+      mel[phrase][idx % 4].forEach(function (n) { bell(n[1], t + n[0] * beat, Math.max(1.4, n[2] * beat * 1.6), 0.085); });
+    }
+    var timer = null, next = 0, idx = 0, muted = false, playing = false;
+    function pump() {
+      while (next < ac.currentTime + 1.2) { schedBar(idx, next); next += bar; idx++; }
+    }
+    return {
+      prime: function () { if (ac.state === 'suspended') ac.resume(); },
+      start: function () {
+        if (playing) return; playing = true;
+        if (ac.state === 'suspended') ac.resume();
+        var t = ac.currentTime;
+        [84, 88, 91, 96, 100].forEach(function (m, i) { bell(m, t + i * 0.12, 2.6, 0.09); });
+        master.gain.cancelScheduledValues(t);
+        master.gain.setValueAtTime(0, t);
+        master.gain.linearRampToValueAtTime(muted ? 0 : 0.9, t + 3.5);
+        next = t + 0.6; idx = 0; pump(); timer = setInterval(pump, 250);
+      },
+      toggle: function () {
+        muted = !muted;
+        var t = ac.currentTime;
+        master.gain.cancelScheduledValues(t);
+        master.gain.setValueAtTime(master.gain.value, t);
+        master.gain.linearRampToValueAtTime(muted ? 0 : 0.9, t + 0.4);
+        return muted;
+      },
+      suspend: function () { if (playing) ac.suspend(); },
+      resume: function () { if (playing) ac.resume(); }
+    };
+  }
+  /* ===== Nhạc từ file riêng: đặt file "music.mp3" (hoặc .m4a/.ogg/.wav...) cùng thư mục với file HTML ===== */
+  var fileAudio = null, fileState = 'pending';
+  (function probe() {
+    var cand = ['music.mp3', 'music.m4a', 'music.ogg', 'music.wav', 'music.aac', 'music.flac', 'music.webm', 'music'];
+    var i = 0;
+    function tryNext() {
+      if (i >= cand.length) { fileState = 'failed'; return; }
+      var a = new Audio(); a.preload = 'auto'; a.loop = true; a.volume = 0;
+      a.addEventListener('loadedmetadata', function () { fileAudio = a; fileState = 'ok'; }, { once: true });
+      a.addEventListener('error', function () { i++; tryNext(); }, { once: true });
+      a.src = cand[i];
+    }
+    tryNext();
+  })();
+  function fileMusicObj() {
+    var a = fileAudio, playing = false, muted = false, ramp = null;
+    function fade(to, ms) {
+      clearInterval(ramp);
+      var from = a.volume, t0 = performance.now();
+      ramp = setInterval(function () {
+        var k = Math.min(1, (performance.now() - t0) / ms);
+        a.volume = Math.max(0, Math.min(1, from + (to - from) * k));
+        if (k >= 1) clearInterval(ramp);
+      }, 50);
+    }
+    return {
+      prime: function () { // mở khóa quyền phát âm thanh ngay trong lúc bấm nút
+        a.muted = true;
+        var p = a.play();
+        if (p && p.then) p.then(function () { if (!playing) { a.pause(); a.currentTime = 0; } a.muted = false; }).catch(function () { a.muted = false; });
+        else a.muted = false;
+      },
+      start: function () {
+        if (playing) return; playing = true;
+        a.muted = false; a.volume = 0; a.currentTime = 0;
+        var p = a.play(); if (p && p.catch) p.catch(function () {});
+        fade(muted ? 0 : 1, 3500);
+      },
+      toggle: function () { muted = !muted; fade(muted ? 0 : 1, 400); return muted; },
+      suspend: function () { if (playing) a.pause(); },
+      resume: function () { if (playing) { var p = a.play(); if (p && p.catch) p.catch(function () {}); } }
+    };
+  }
+  // Ưu tiên file nhạc của bạn; nếu không tìm thấy file thì dùng nhạc tự tạo ở trên
+  function makeMusic() {
+    var f = null, s = null, muted = false, started = false;
+    return {
+      prime: function () {
+        if (fileState === 'ok') { f = fileMusicObj(); f.prime(); }
+        else { try { s = createMusic(); } catch (e) { s = null; } if (s) s.prime(); }
+      },
+      start: function () {
+        if (!f && fileState === 'ok') f = fileMusicObj();
+        var m = f || s; if (!m) return;
+        started = true; m.start(); if (muted) m.toggle();
+      },
+      toggle: function () { muted = !muted; if (started) (f || s).toggle(); return muted; },
+      suspend: function () { var m = f || s; if (m && started) m.suspend(); },
+      resume: function () { var m = f || s; if (m && started) m.resume(); }
+    };
+  }
+  var music = null, musicBtn = document.getElementById('musicBtn'), wantMuted = false;
+  musicBtn.addEventListener('click', function () {
+    if (music) wantMuted = music.toggle(); else wantMuted = !wantMuted;
+    musicBtn.textContent = wantMuted ? '🔇 Nhạc' : '🔊 Nhạc';
+  });
+  document.addEventListener('visibilitychange', function () {
+    if (!music) return; document.hidden ? music.suspend() : music.resume();
+  });
+
+  var started = false;
+  btn.addEventListener('click', function () {
+    if (started) return; started = true;
+    try { music = makeMusic(); music.prime(); if (wantMuted) music.toggle(); } catch (e) { music = null; }
+    gate.classList.add('going');
+    lock.classList.add('open');
+    // 1) khóa mở → 2) khóa phóng to biến mất, tăng tốc xuyên không gian
+    setTimeout(function () { gate.classList.add('warp'); target = 0.045; heartsOn = true; }, 1000);
+    msgs.forEach(function (m) { setTimeout(function () { say(m[1]); }, 1000 + m[0] * 1000); });
+    // 3) lóe sáng rồi hiện bó hoa
+    setTimeout(function () { gate.classList.add('flash'); if (music) music.start(); }, 1000 + 6600);
+    setTimeout(function () {
+      if (window.__startBouquet) window.__startBouquet();
+      gate.classList.add('done');
+      setTimeout(function () { running = false; }, 1400);
+    }, 1000 + 7300);
+  });
 })();
 </script>
 </body>
