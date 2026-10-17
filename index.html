@@ -2,12 +2,15 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#12061f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Chúc mừng 20/10 💐</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500&family=Pacifico&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
-  html,body{height:100%;overflow:hidden}
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
   body{
     font-family:'Be Vietnam Pro',system-ui,sans-serif;color:#fff;
     background:radial-gradient(ellipse at 50% 55%,var(--c1,#a63a86) 0%,var(--c2,#6b2170) 40%,var(--c3,#34103f) 80%,var(--c4,#1f0a2a) 100%);
@@ -55,7 +58,7 @@
 
   canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
   .ui{position:fixed;inset:0;pointer-events:none;display:flex;flex-direction:column;
-      align-items:center;justify-content:space-between;text-align:center;padding:4.5vh 20px 4vh}
+      align-items:center;justify-content:space-between;text-align:center;padding:calc(4.5vh + env(safe-area-inset-top,0px)) calc(20px + env(safe-area-inset-right,0px)) calc(4vh + env(safe-area-inset-bottom,0px)) calc(20px + env(safe-area-inset-left,0px))}
 
   .kicker{letter-spacing:.35em;text-transform:uppercase;font-size:clamp(10px,1.6vw,14px);font-weight:400;color:#ffd9ea}
   .go .kicker{animation:kick 2.2s 1s cubic-bezier(.2,.8,.2,1) both}
@@ -80,9 +83,10 @@
   .go .msg.out .wd{animation:wdOut .55s ease-in calc(var(--w)*.025s) both}
 
   button{pointer-events:auto;cursor:pointer;border:1px solid rgba(255,255,255,.55);color:#fff;
-      background:rgba(255,255,255,.14);backdrop-filter:blur(6px);padding:9px 22px;border-radius:999px;
-      font:500 14px 'Be Vietnam Pro',system-ui,sans-serif;transition:.25s}
-  button:hover{background:rgba(255,255,255,.28);transform:translateY(-2px)}
+      background:rgba(255,255,255,.14);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:9px 22px;border-radius:999px;
+      font:500 14px 'Be Vietnam Pro',system-ui,sans-serif;transition:.25s;touch-action:manipulation}
+  button:active{background:rgba(255,255,255,.3)}
+  @media (hover:hover){button:hover{background:rgba(255,255,255,.28);transform:translateY(-2px)}}
   #err{display:none;position:fixed;inset:0;place-items:center;text-align:center;padding:30px;background:#34103f;z-index:9}
 
   /* chuyển cảnh mở màn: mống mắt (iris) + sóng ánh sáng */
@@ -159,6 +163,30 @@
       background:radial-gradient(circle at 50% 55%,#fff 0%,#ffd3ea 35%,#ff9ccb 70%,#c06ad0 100%)}
   #gate.flash .g-flash{animation:gflash 1.5s ease-in-out forwards}
   @keyframes gflash{0%{opacity:0}35%{opacity:1}70%{opacity:1}100%{opacity:0}}
+
+  /* ===== Thích ứng điện thoại ===== */
+  @supports (height:100dvh){#gate,.ui,.curtain{height:100dvh}}
+  #gate{padding:calc(20px + env(safe-area-inset-top,0px)) calc(20px + env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) calc(20px + env(safe-area-inset-left,0px));touch-action:manipulation}
+  .g-msg{bottom:calc(12vh + env(safe-area-inset-bottom,0px))}
+  @media (pointer:coarse),(max-width:700px){
+    .aurora i{filter:blur(40px)}
+    .rays{display:none}
+  }
+  @media (max-width:380px){button{padding:8px 16px;font-size:13px}}
+  @media (max-height:520px){
+    .g-lockwrap{width:72px;height:82px;margin:0}
+    .g-stage{gap:6px}
+    .g-sub{display:none}
+    .g-title{font-size:24px}
+    #unlockBtn{margin-top:4px;padding:10px 26px}
+    .g-msg{bottom:8vh;font-size:18px}
+    .ui{padding-top:calc(2vh + env(safe-area-inset-top,0px));padding-bottom:calc(2vh + env(safe-area-inset-bottom,0px))}
+    h1{font-size:clamp(28px,7vh,44px)}
+    .hint{display:none}
+    .msg{min-height:2.6em;font-size:12px;line-height:1.5}
+    .kicker{font-size:10px}
+    footer{gap:6px}
+  }
 </style>
 </head>
 <body>
@@ -236,7 +264,8 @@
   try {
     renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true, alpha: true });
   } catch (e) { showErr(); return; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  const coarse = !!(window.matchMedia && matchMedia('(pointer:coarse)').matches);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2));
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.2;
@@ -723,7 +752,7 @@
     const w = window.innerWidth, h = window.innerHeight;
     renderer.setSize(w, h, false);
     camera.aspect = w / h; camera.updateProjectionMatrix();
-    baseDist = Math.max(12.5, 8.8 / camera.aspect);
+    baseDist = Math.max(12.5, 9.8 / camera.aspect);
   }
   window.addEventListener('resize', resize); resize();
 
@@ -731,6 +760,7 @@
   const clock = new THREE.Clock();
   function tick() {
     const dt = Math.min(clock.getDelta(), 0.05), t = clock.elapsedTime;
+    if (!window.__live) { requestAnimationFrame(tick); return; }
 
     const it = t - introT0; // thời gian của đoạn mở màn
 
@@ -825,6 +855,7 @@
     renderer.render(scene, camera);
     requestAnimationFrame(tick);
   }
+  try { renderer.compile(scene, camera); } catch (e) {}
   tick();
 })();
 </script>
@@ -872,6 +903,7 @@
   }
   function theme(i) { body.dataset.theme = i; document.dispatchEvent(new CustomEvent('theme', { detail: i })); }
   function play() {
+    window.__live = true;
     body.classList.remove('go'); void body.offsetWidth; body.classList.add('go');
     wi = 0; setMsg(0, '3.9s'); theme(0); cycle(11000);
     document.dispatchEvent(new Event('replay'));
@@ -890,14 +922,14 @@
 
   var W, H, DPR, cx, cy;
   function size() {
-    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    DPR = Math.min(window.devicePixelRatio || 1, (window.matchMedia && matchMedia('(pointer:coarse)').matches) ? 1.5 : 2);
     W = cv.width = Math.round(innerWidth * DPR); H = cv.height = Math.round(innerHeight * DPR);
     cx = W / 2; cy = H * 0.5;
   }
   size(); addEventListener('resize', size);
 
   var cols = ['255,255,255', '255,170,215', '255,225,150', '190,150,255', '255,120,180'];
-  var N = 420, st = [];
+  var N = Math.min(innerWidth, innerHeight) < 700 ? 260 : 420, st = [];
   function mk(z) {
     return { x: (Math.random() * 2 - 1), y: (Math.random() * 2 - 1), z: z === undefined ? Math.random() : z,
              c: cols[Math.floor(Math.random() * cols.length)], s: 0.6 + Math.random() * 1.4 };
@@ -975,8 +1007,13 @@
 
   /* ===== Nhạc từ file riêng: đặt file "music.mp3" (hoặc .m4a/.ogg/.wav...) cùng thư mục với file HTML ===== */
   var fileAudio = null, fileState = 'pending';
-  (function probe() {
-    var cand = ['music.mp3', 'music.m4a', 'music.ogg', 'music.wav', 'music.aac', 'music.flac', 'music.webm', 'music'];
+  var cand = ['music.mp3'];
+  function useUrl(u) {
+    var a = new Audio(); a.preload = 'auto'; a.loop = true;
+    a.setAttribute('playsinline', ''); a.setAttribute('webkit-playsinline', '');
+    a.src = u; fileAudio = a; fileState = 'ok';
+  }
+  function elementProbe() { // mở file trực tiếp trên máy tính: thử tải từng tên
     var i = 0;
     function tryNext() {
       if (i >= cand.length) { fileState = 'failed'; return; }
@@ -986,16 +1023,30 @@
       a.src = cand[i];
     }
     tryNext();
-  })();
+  }
+  if (/^https?:/.test(location.protocol) && window.fetch) {
+    // chạy trên web (điện thoại): dò tên file bằng HEAD, không cần tải cả bài
+    (function tryFetch(i) {
+      if (i >= cand.length) { elementProbe(); return; }
+      fetch(cand[i], { method: 'HEAD', cache: 'no-store' }).then(function (r) {
+        var ct = (r.headers.get('content-type') || '').toLowerCase();
+        if (r.ok && ct.indexOf('text/html') < 0) useUrl(cand[i]); else tryFetch(i + 1);
+      }).catch(function () { tryFetch(i + 1); });
+    })(0);
+  } else {
+    elementProbe();
+  }
   function fileMusicObj() {
-    var a = fileAudio, playing = false, muted = false, ramp = null;
-    function fade(to, ms) {
+    var a = fileAudio, playing = false, muted = false, ramp = null, volOK = false;
+    try { a.volume = 0.5; volOK = (a.volume === 0.5); } catch (e) {} // iPhone không cho chỉnh volume
+    function fade(to, ms, done) {
       clearInterval(ramp);
+      if (!volOK) { if (done) done(); return; }
       var from = a.volume, t0 = performance.now();
       ramp = setInterval(function () {
         var k = Math.min(1, (performance.now() - t0) / ms);
         a.volume = Math.max(0, Math.min(1, from + (to - from) * k));
-        if (k >= 1) clearInterval(ramp);
+        if (k >= 1) { clearInterval(ramp); if (done) done(); }
       }, 50);
     }
     return {
@@ -1007,11 +1058,16 @@
       },
       start: function () {
         if (playing) return; playing = true;
-        a.muted = false; a.volume = 0; a.currentTime = 0;
+        a.muted = false; if (volOK) a.volume = 0; try { a.currentTime = 0; } catch (e) {}
         var p = a.play(); if (p && p.catch) p.catch(function () {});
-        fade(muted ? 0 : 1, 3500);
+        fade(1, 3500);
       },
-      toggle: function () { muted = !muted; fade(muted ? 0 : 1, 400); return muted; },
+      toggle: function () {
+        muted = !muted;
+        if (muted) fade(0, 400, function () { a.muted = true; });
+        else { a.muted = false; fade(1, 400); }
+        return muted;
+      },
       suspend: function () { if (playing) a.pause(); },
       resume: function () { if (playing) { var p = a.play(); if (p && p.catch) p.catch(function () {}); } }
     };
